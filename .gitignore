@@ -1,0 +1,7 @@
+#Hugo
+public/
+/resources/_gen/
+
+#Visual Studio Code
+.vscode/*
+*.code-workspace
