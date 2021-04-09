@@ -1,0 +1,26 @@
+{{ define "title" }}
+  {{ title (i18n (lower .Title)) | default .Title }} · {{ .Site.Title }}
+{{ end }}
+{{ define "content" }}
+  <section class="container list">
+    <h1 class="title">
+      <a class="title-link" href="{{ .Permalink | safeURL }}">
+        {{ title (i18n (lower .Title)) | default .Title }}
+      </a>
+    </h1>
+    {{ .Content }}
+    <ul>
+        {{- if gt .Site.Taxonomies.categories.projects 0}}
+        {{ range sort .Site.Taxonomies.categories.projects "Title" "asc"}}
+        <li>
+        <div class="project">
+            <a href="{{ .Page.Permalink}}" class="title">{{ .Page.LinkTitle }}</a>
+            <span class="project-source">{{ with .Page.Params.source }}{{ partial "partials/source.html" . }}{{ end }}</span>                <span class="project-summary">{{ .Page.Summary }}</span>
+        </div>
+        </li>
+        {{ end }}
+        {{ end }}
+
+    </ul>
+  </section>
+{{ end }}

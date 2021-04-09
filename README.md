@@ -8,7 +8,7 @@
 
 ## Installation
 ### Local – Docker
-```zsh
+```sh
 $ git clone --recurse-submodules https://github.com/14zombies/calumcrawford.com
 $ cd calumcrawford.com
 $ hugo
@@ -16,22 +16,20 @@ $ docker run --rm -d -p 8000:80 --name calumcrawford.com $(docker build -q .)
 ```
 
 ### Local – Hugo Server
-```zsh
+```sh
 $ git clone --recurse-submodules https://github.com/14zombies/calumcrawford.com
 $ cd calumcrawford.com
 $ hugo server -w
 ```
 
 ### Pull from github.
-```bash
+```sh
 $ docker run --rm -d -p 8000:80 --name calumcrawford.com ghcr.io/14zombies/calumcrawford.com
 ```
 
 ## Documentation
 
-For the moment this is built using github actions and deployed using watchtower.
-
-This will eventually move to selfhosted gitea and drone.
+For the moment this is built using Github actions and deployed using Watchtower.
 
 ## Info
 * Theme: [hugo-coder](https://github.com/luizdepra/hugo-coder)

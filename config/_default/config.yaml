@@ -1,0 +1,17 @@
+---
+title: 'Calum·Crawford'
+baseURL: 'https://calumcrawford.com'
+relativeURLs: true
+enableRobotsTXT: true
+
+theme: 'hugo-coder'
+
+language: 'en'
+languageCode: 'en-GB'
+
+# permalinks:
+#   fixed: ':title/'
+#   posts: 'posts/:slug/'
+#   projects: 'projects/:slug/'
+
+---
