@@ -1,0 +1,45 @@
+---
+##
+domain: &domain https://calumcrawford.com
+hugo_version: &hugo_version 0.89.4
+## 
+kind: pipeline
+type: docker
+name: main
+
+steps:
+- name: submodules
+  image: alpine/git
+  commands:
+  - git submodule update --init --recursive
+    
+- name: build
+  image: plugins/hugo
+  settings:
+    hugo_version: *hugo_version
+    validate: true
+    url: *domain
+
+
+- name: docker
+  image: plugins/docker
+  settings:
+    registry: git.14zombies.com
+    username:
+      from_secret: username
+    password:
+        from_secret: password
+    repo: git.14zombies.com/cal/calumcrawford.com
+    tags: 
+      - latest
+      - ${DRONE_TAG##v}
+
+trigger:
+  event:
+    - tag
+
+---
+kind: signature
+hmac: 5a174a5bf38fd940fed8d111060e54e7cf6177151ef610e944963db3afe035d2
+
+...
