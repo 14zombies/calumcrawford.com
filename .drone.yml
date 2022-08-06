@@ -8,12 +8,12 @@ type: docker
 name: main
 
 steps:
-- name: submodules
+- name: Clone submodules
   image: alpine/git
   commands:
   - git submodule update --init --recursive
     
-- name: build
+- name: Hugo build
   image: plugins/hugo
   settings:
     hugo_version: *hugo_version
@@ -21,7 +21,7 @@ steps:
     url: *domain
 
 
-- name: docker
+- name: Docker image build & push
   image: plugins/docker
   settings:
     registry: git.14zombies.com
@@ -34,12 +34,18 @@ steps:
       - latest
       - ${DRONE_TAG##v}
 
+- name: Deploy
+  image: plugins/webhook
+  settings:
+    urls:
+      from_secret: hook
+
 trigger:
   event:
     - tag
 
 ---
 kind: signature
-hmac: 5a174a5bf38fd940fed8d111060e54e7cf6177151ef610e944963db3afe035d2
+hmac: e0d681099e1a982157457aec343ae4ef9bb8c1d5b138885785a7c71e32507c0d
 
 ...
