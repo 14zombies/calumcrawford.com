@@ -46,10 +46,10 @@ social:
   #   weight: 3
   #   url: 'https://gist.github.com/14zombies'
 
-  - name: 'Twitter'
-    icon: 'fa fa-twitter fa-2x'
+  - name: 'Mastodon'
+    icon: 'fa fa-mastodon fa-2x'
     weight: 4
-    url: 'https://twitter.com/14zombies'
+    url: 'https://mastodon.social/@14zombies'
 
   - name: 'RSS'
     icon: 'fa fa-rss fa-2x'

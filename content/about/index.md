@@ -8,7 +8,7 @@ author: "Calum Crawford"
 ---
 
 Hello! I'm Calum Crawford. This site is mostly just for myself as a way to document my projects and distractions.
-On the off chance that someone will find anything useful or broken, please get in touch via [Email](mailto:{{< param email >}}) or [Twitter](https://twitter.com/14zombies).
+On the off chance that someone will find anything useful or broken, please get in touch via [Email](mailto:{{< param email >}}) or [Mastodon](https://mastodon.social/@14zombies).
 
 
 {{<figure src="/images/avatar.jpg" width="370px" alt="Profile Image">}}
