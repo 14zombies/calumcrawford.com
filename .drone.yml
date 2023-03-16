@@ -1,7 +1,7 @@
 ---
 ##
 domain: &domain https://calumcrawford.com
-hugo_version: &hugo_version 0.89.4
+hugo_version: &hugo_version 0.111.3
 ## 
 kind: pipeline
 type: docker
@@ -46,6 +46,6 @@ trigger:
 
 ---
 kind: signature
-hmac: e0d681099e1a982157457aec343ae4ef9bb8c1d5b138885785a7c71e32507c0d
+hmac: 538dc58c5224bbcd6a939a3bf3f58a5f0a686abf7a16ccc729c7578d55707399
 
 ...
