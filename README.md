@@ -1,6 +1,6 @@
-# <img src="https://calumcrawford.com/img/apple-touch-icon.png" alt="calumcrawford.com logo" height=30 /> calumcrawford.com
+# <img src="https://calumcrawford.com/favicons/apple-touch-icon.png" alt="calumcrawford.com logo" height=30 /> calumcrawford.com
 
-> Source for calumcrawford.com with github actions.
+> Source for calumcrawford.com.
 
 ## Prerequisites
 * [Hugo](https://gohugo.io/) - Static site generator
@@ -26,10 +26,6 @@ $ hugo server -w
 ```sh
 $ docker run --rm -d -p 8000:80 --name calumcrawford.com ghcr.io/14zombies/calumcrawford.com
 ```
-
-## Documentation
-
-For the moment this is built using Github actions and deployed using Watchtower.
 
 ## Info
 * Theme: [hugo-coder](https://github.com/luizdepra/hugo-coder)

@@ -1,7 +1,7 @@
 ---
 ##
 domain: &domain https://calumcrawford.com
-hugo_version: &hugo_version 0.89.4
+hugo_version: &hugo_version 0.111.3
 ## 
 kind: pipeline
 type: docker
@@ -17,7 +17,9 @@ steps:
   image: plugins/hugo
   settings:
     hugo_version: *hugo_version
-    validate: true
+    minify: true
+    pull: always
+    validate: false
     url: *domain
 
 
@@ -46,6 +48,6 @@ trigger:
 
 ---
 kind: signature
-hmac: e0d681099e1a982157457aec343ae4ef9bb8c1d5b138885785a7c71e32507c0d
+hmac: e08bbce674eb50da7ffea21b0ed4650f2030187d309fb79f4a9aa52a4dc87a2f
 
 ...
