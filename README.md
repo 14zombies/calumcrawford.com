@@ -6,6 +6,19 @@
 * [Hugo](https://gohugo.io/) - Static site generator
 * [Docker](https://docker.com) - Containers (Optional)
 
+## Bumping Versions
+### CI/CD
+In the drone.yml file ammend the following YMAL variables:
+```yaml
+hugo_version: &hugo_version 0.120.4
+nginx_tag: &nginx_tag 1.25-alpine
+```
+### Manual
+```sh
+docker build --build-arg NGINX_TAG=1.25-alpine
+```
+
+
 ## Installation
 ### Local – Docker
 ```sh
