@@ -14,7 +14,7 @@ steps:
   commands:
   - git submodule update --init --recursive
 
-- name: Docker image build & push
+- name: Docker image build & push (linux-amd64)
   image: plugins/docker
   settings:
     registry: git.14zombies.com
@@ -26,9 +26,33 @@ steps:
     tags: 
       - latest
       - ${DRONE_TAG##v}
+    platform:
+      os: linux
+      arch: amd64
     build_args:
       - NGINX_TAG=1.25-alpine
       - HUGO_VERSION=0.121.0
+      - HUGO_ARCH=linux-amd64
+
+- name: Docker image build & push (linux-arm64)
+  image: plugins/docker
+  settings:
+    registry: git.14zombies.com
+    username:
+      from_secret: username
+    password:
+        from_secret: password
+    repo: git.14zombies.com/cal/calumcrawford.com
+    tags: 
+      - latest
+      - ${DRONE_TAG##v}
+    platform:
+      os: linux
+      arch: arm64
+    build_args:
+      - NGINX_TAG=1.25-alpine
+      - HUGO_VERSION=0.121.0
+      - HUGO_ARCH=linux-arm64
 
 - name: Deploy
   image: plugins/webhook
@@ -42,6 +66,6 @@ trigger:
 
 ---
 kind: signature
-hmac: a17ffa3844f2bc70a227a287b16aca37b9666042f210707f157e57d8a95c2aea
+hmac: a1095d7e277afcdb9541e9b88c32603c424ab9ff6a3501dd33a86bfebdb20494
 
 ...
