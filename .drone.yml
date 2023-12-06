@@ -1,8 +1,8 @@
 ---
 ##
-domain: &domain https://calumcrawford.com
-hugo_version: &hugo_version 0.120.4
-nginx_tag: &nginx_tag 1.25-alpine
+# domain: &domain https://calumcrawford.com
+# hugo_version: &hugo_version 0.121.0
+# nginx_tag: &nginx_tag 1.25-alpine
 ## 
 kind: pipeline
 type: docker
@@ -13,16 +13,6 @@ steps:
   image: alpine/git
   commands:
   - git submodule update --init --recursive
-    
-- name: Hugo build
-  image: plugins/hugo
-  settings:
-    hugo_version: *hugo_version
-    minify: true
-    pull: always
-    validate: false
-    url: *domain
-
 
 - name: Docker image build & push
   image: plugins/docker
@@ -37,7 +27,8 @@ steps:
       - latest
       - ${DRONE_TAG##v}
     build_args:
-      - NGINX_TAG=*nginx_tag
+      - NGINX_TAG=1.25-alpine
+      - HUGO_VERSION=0.121.0
 
 - name: Deploy
   image: plugins/webhook
@@ -51,6 +42,6 @@ trigger:
 
 ---
 kind: signature
-hmac: e08bbce674eb50da7ffea21b0ed4650f2030187d309fb79f4a9aa52a4dc87a2f
+hmac: a17ffa3844f2bc70a227a287b16aca37b9666042f210707f157e57d8a95c2aea
 
 ...
