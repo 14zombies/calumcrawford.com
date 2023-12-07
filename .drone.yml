@@ -1,71 +1,194 @@
 ---
-##
-# domain: &domain https://calumcrawford.com
-# hugo_version: &hugo_version 0.121.0
-# nginx_tag: &nginx_tag 1.25-alpine
-## 
+####
+#
+# BUILD AMD64 IMAGE
+#
+####
 kind: pipeline
 type: docker
-name: main
+name: build linux-amd64
+platform:
+  os: linux
+  arch: amd64
 
 steps:
-- name: Clone submodules
-  image: alpine/git
-  commands:
-  - git submodule update --init --recursive
+  - name: submodule
+    image: alpine/git
+    commands:
+      - git submodule update --init --recursive
 
-- name: Docker image build & push (linux-amd64)
-  image: plugins/docker
-  settings:
-    registry: git.14zombies.com
-    username:
-      from_secret: username
-    password:
+  - name: Docker image build & push (linux-amd64)
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile
+      registry: git.14zombies.com
+      username:
+        from_secret: username
+      password:
         from_secret: password
-    repo: git.14zombies.com/cal/calumcrawford.com
-    tags: 
-      - latest
-      - ${DRONE_TAG##v}
-    platform:
-      os: linux
-      arch: amd64
-    build_args:
-      - NGINX_TAG=1.25-alpine
-      - HUGO_VERSION=0.121.0
-      - HUGO_ARCH=linux-amd64
+      repo: git.14zombies.com/cal/calumcrawford.com
+      auto_tag: true
+      auto_tag_suffix: linux-amd64
+      build_args:
+        - DOMAIN=https://calumcrawford.com
+        - NGINX_TAG=1.25-alpine
+        - HUGO_VERSION=0.121.0
+        - HUGO_ARCH=linux-amd64
+      platforms:
+        - linux/amd64
+trigger:
+  event:
+    - tag
+    - push
 
-- name: Docker image build & push (linux-arm64)
-  image: plugins/docker
-  settings:
-    registry: git.14zombies.com
-    username:
-      from_secret: username
-    password:
+---
+####
+#
+# BUILD ARM64 IMAGE
+#
+####
+kind: pipeline
+type: docker
+name: build linux-arm64
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: submodule
+    image: alpine/git
+    commands:
+      - git submodule update --init --recursive
+
+  - name: Docker image build & push (linux-arm64)
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile
+      registry: git.14zombies.com
+      username:
+        from_secret: username
+      password:
         from_secret: password
-    repo: git.14zombies.com/cal/calumcrawford.com
-    tags: 
-      - latest
-      - ${DRONE_TAG##v}
-    platform:
-      os: linux
-      arch: arm64
-    build_args:
-      - NGINX_TAG=1.25-alpine
-      - HUGO_VERSION=0.121.0
-      - HUGO_ARCH=linux-arm64
+      repo: git.14zombies.com/cal/calumcrawford.com
+      auto_tag: true
+      auto_tag_suffix: linux-arm64
+      build_args:
+        - DOMAIN=https://calumcrawford.com
+        - NGINX_TAG=1.25-alpine
+        - HUGO_VERSION=0.121.0
+        - HUGO_ARCH=linux-arm64
+      platforms:
+        - linux/arm64
 
-- name: Deploy
-  image: plugins/webhook
-  settings:
-    urls:
-      from_secret: hook
+trigger:
+  event:
+    - tag
+    - push
 
+---
+####
+#
+# BUILD MANIFEST
+#
+####
+kind: pipeline
+type: docker
+name: manifest
+steps:
+  - name: manifest
+    image: plugins/manifest
+    settings:
+      spec: docker/manifest.tmpl
+      ignore_missing: true
+      registry: git.14zombies.com
+      password:
+        from_secret: password
+      username:
+        from_secret: username
+depends_on:
+  - build linux-amd64
+  - build linux-arm64
+---
+####
+#
+# DEPLOY TAGGED IMAGE
+#
+####
+kind: pipeline
+type: docker
+name: Deploy
+steps:
+  - name: deploy – webhook
+    image: plugins/webhook
+    settings:
+      urls:
+        from_secret: hook
+depends_on:
+  - build linux-amd64
+  - build linux-arm64
 trigger:
   event:
     - tag
 
 ---
+####
+#
+# DEPLOY DEV IMAGE
+#
+####
+kind: pipeline
+type: docker
+name: Deploy – dev.calumcrawford.com
+steps:
+  - name: deploy – webhook
+    image: plugins/webhook
+    settings:
+      urls:
+        from_secret: dev_hook
+depends_on:
+  - build linux-amd64
+  - build linux-arm64
+trigger:
+  event:
+    - push
+
+---
+####
+#
+# GITEA RELEASE
+#
+####
+kind: pipeline
+name: Gitea Release
+steps:
+  - name: submodule
+    image: alpine/git
+    commands:
+      - git submodule update --init --recursive
+
+  - name: hugo build
+    image: plugins/hugo
+    settings:
+      hugo_version: 0.121.0
+      url: https://calumcrawford.com
+  - name: build tar
+    image: alpine/git
+    commands:
+      - tar czf ${DRONE_TAG}.tar.gz public/*
+  - name: gitea release
+    image: plugins/gitea-release
+    settings:
+      base_url: https://git.14zombies.com
+      api_key:
+        from_secret: release_token
+      files: ${DRONE_TAG}.tar.gz
+      checksum:
+        - sha256
+trigger:
+  event:
+    - tag
+---
 kind: signature
-hmac: a1095d7e277afcdb9541e9b88c32603c424ab9ff6a3501dd33a86bfebdb20494
+hmac: f22968651dacc7b2e27e7a7f5a6c15c41eaecff8ee0b3853254e5dda7543bd24
 
 ...
