@@ -151,6 +151,7 @@ depends_on:
 trigger:
   event:
     - push
+    - tag
 
 ---
 ####
@@ -189,6 +190,6 @@ trigger:
     - tag
 ---
 kind: signature
-hmac: f22968651dacc7b2e27e7a7f5a6c15c41eaecff8ee0b3853254e5dda7543bd24
+hmac: e3fef56e185c18458f24925f97fc1f978b4921e0950c3486d830b5aa6ee0b4e0
 
 ...
