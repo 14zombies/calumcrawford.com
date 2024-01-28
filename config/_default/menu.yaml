@@ -1,14 +1,13 @@
-# main:
-#   - name: 'About'
-#     weight: 100
-#     url: '/about/'
-#
-#   - name: 'Posts'
-#     weight: 200
-#     identifier: 'posts'
-#     url: '/posts/'
-#
-#   - name: 'Projects'
-#     weight: 200
-#     url: '/projects/'
-
+---
+main:
+  - name: 'About'
+    weight: 100
+    url: '/about/'
+  #   - name: 'Posts'
+  #     weight: 200
+  #     identifier: 'posts'
+  #     url: '/posts/'
+  - name: 'Projects'
+    weight: 200
+    url: '/projects/'
+---

@@ -10,8 +10,8 @@ language: 'en'
 languageCode: 'en-GB'
 
 # permalinks:
+# projects: 'projects/:slug/'
 #   fixed: ':title/'
 #   posts: 'posts/:slug/'
-#   projects: 'projects/:slug/'
 
 ---

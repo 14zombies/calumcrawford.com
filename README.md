@@ -10,8 +10,8 @@
 ### CI/CD
 In the drone.yml file ammend the following build args:
 ```yaml
-hugo_version
-nginx_tag
+HUGO_VERSION
+NGINX_TAG
 ```
 ### Manually sepcify versions
 ```sh
@@ -61,8 +61,6 @@ Used by calumcrawford.com which runs only tagged commits.
 ## TODO
     
 - Make bumping versions easier
-- switch test.calumcrawford.com to dev.calumcrawford.com
-- Streamline docker files
 
 ## Authors
 * [**Calum Crawford**](https://calumcrawford.com)
