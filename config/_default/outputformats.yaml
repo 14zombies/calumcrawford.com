@@ -1,0 +1,10 @@
+---
+manifest:
+  mediaType: "application/manifest+json"
+  baseName: "manifest"
+  rel: "manifest"
+  isPlainText: true
+  isHTML: false
+  noUgly: false
+  notAlternative: true
+---

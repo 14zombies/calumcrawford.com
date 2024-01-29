@@ -1,0 +1,5 @@
+---
+application/manifest+json:
+  suffixes:
+    "webmanifest"
+---
