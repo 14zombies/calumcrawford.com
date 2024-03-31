@@ -1,6 +1,6 @@
 
 #Build Image
-ARG NGINX_TAG=stable-alpine-slim
+ARG NGINX_TAG=1.25.3-alpine-slim
 
 FROM debian:stable-slim as builder
 ARG DOMAIN=localhost
@@ -19,7 +19,7 @@ COPY . /src
 RUN /usr/local/bin/hugo --minify --gc --enableGitInfo -b ${DOMAIN}
 
 # Final Image
-ARG NGINX_TAG=stable-alpine-slim
+ARG NGINX_TAG
 FROM nginx:$NGINX_TAG
 LABEL maintainer="Calum Crawford <c@calumcrawford.com>"
 COPY --from=builder /src/public/ /usr/share/nginx/html/
