@@ -10,13 +10,11 @@ name: build linux-amd64
 platform:
   os: linux
   arch: amd64
-
 steps:
   - name: submodule
     image: alpine/git
     commands:
       - git submodule update --init --recursive
-
   - name: Docker image build & push (linux-amd64)
     image: plugins/docker
     settings:
@@ -39,7 +37,6 @@ trigger:
   event:
     - tag
     - push
-
 ---
 ####
 #
@@ -52,13 +49,11 @@ name: build linux-arm64
 platform:
   os: linux
   arch: arm64
-
 steps:
   - name: submodule
     image: alpine/git
     commands:
       - git submodule update --init --recursive
-
   - name: Docker image build & push (linux-arm64)
     image: plugins/docker
     settings:
@@ -81,7 +76,6 @@ trigger:
   event:
     - tag
     - push
-
 ---
 ####
 #
@@ -105,7 +99,6 @@ steps:
 depends_on:
   - build linux-amd64
   - build linux-arm64
-
 ---
 ####
 #
@@ -115,6 +108,8 @@ depends_on:
 kind: pipeline
 type: docker
 name: Deploy
+clone:
+  disable: true
 steps:
   - name: deploy – webhook
     image: plugins/webhook
@@ -128,7 +123,6 @@ trigger:
   event:
     - push
     - tag
-
 ---
 ####
 #
@@ -138,6 +132,8 @@ trigger:
 kind: pipeline
 type: docker
 name: Deploy – dev.calumcrawford.com
+clone:
+  disable: true
 steps:
   - name: deploy – webhook
     image: plugins/webhook
@@ -151,7 +147,6 @@ trigger:
   event:
     - push
     - tag
-
 ---
 ####
 #
@@ -166,11 +161,10 @@ steps:
     image: alpine/git
     commands:
       - git submodule update --init --recursive
-
   - name: hugo build
     image: plugins/hugo
     settings:
-      hugo_version: 0.121.0
+      hugo_version: 0.122.0
       url: https://calumcrawford.com
   - name: build tar
     image: alpine/git
@@ -188,9 +182,8 @@ steps:
 trigger:
   event:
     - tag
-
 ---
 kind: signature
-hmac: 09b801f08faec15d04dc05fe7d1c22e8a1048b710eed3c71834e304518c48cd5
+hmac: 4a520785b2e6ef532f3e26d44d8d5c7cb9914771f1dc559ed6f99c59e4950805
 
 ...
