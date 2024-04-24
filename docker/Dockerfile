@@ -1,6 +1,6 @@
 
 #Build Image
-ARG NGINX_TAG=1.25.5-alpine-slim@sha256:b27fd01b23890c5f807a00f48b7d636929356f50c1432579ae291752e49465f4
+ARG NGINX_TAG=1.25.5-alpine-slim@sha256:9ae24f8486756d832a21a892a499c54d45a8b67ecc16e6a6b5f80eb741979cda
 
 FROM debian:stable-slim as builder
 ARG DOMAIN=localhost
