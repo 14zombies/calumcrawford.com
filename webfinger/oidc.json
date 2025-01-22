@@ -3,7 +3,7 @@
     "links": [
         {
             "rel": "http://openid.net/specs/connect/1.0/issuer",
-            "href": "https://sso.14zombies.com/realms/14zombies/"
+            "href": "https://sso.14zombies.com/realms/14zombies"
         }
     ]
 }
