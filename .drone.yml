@@ -29,7 +29,7 @@ steps:
       auto_tag_suffix: linux-amd64
       build_args:
         - DOMAIN=https://calumcrawford.com
-        - HUGO_VERSION=0.122.0
+        - HUGO_VERSION=0.141.0
         - HUGO_ARCH=linux-amd64
       platforms:
         - linux/amd64
@@ -68,7 +68,7 @@ steps:
       auto_tag_suffix: linux-arm64
       build_args:
         - DOMAIN=https://calumcrawford.com
-        - HUGO_VERSION=0.122.0
+        - HUGO_VERSION=0.141.0
         - HUGO_ARCH=linux-arm64
       platforms:
         - linux/arm64
@@ -164,7 +164,7 @@ steps:
   - name: hugo build
     image: plugins/hugo
     settings:
-      hugo_version: 0.122.0
+      hugo_version: 0.141.0
       url: https://calumcrawford.com
   - name: build tar
     image: alpine/git
@@ -184,6 +184,6 @@ trigger:
     - tag
 ---
 kind: signature
-hmac: 4a520785b2e6ef532f3e26d44d8d5c7cb9914771f1dc559ed6f99c59e4950805
+hmac: 639d65863e6a6f42c72cf080809f65ba46bae09aa809a6cda018af5ea17b43e7
 
 ...
