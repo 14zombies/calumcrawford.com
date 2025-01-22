@@ -53,6 +53,22 @@ Used by dev.calumcrawford.com which is runs the latest non-tagged commit.
 Published only for tagged commits.
 Used by calumcrawford.com which runs only tagged commits.
 
+## Webfinger
+Thanks to [Serving webfinger resources with nginx](https://fnordig.de/2023/01/02/serving-webfinger-resources-with-nginx/)
+
+Briefly, Nginx rewrites any request's made to .well-known/webfinger based on the resource=acct:user parameter.
+
+Mappings for this rewrite are contained in nginx/includes/webfinger_map.conf
+
+Location of files to rewrite the request to is contained in nginx/includes/webfinger.conf while the files themselves are in the webfinger folder.
+
+As an example for Mastodon the webfinger will request ${DOMAIN}/.well-known/webfinger?resource=acct:14zombies@mastodon.social.
+14zombies@mastodon.social is mapped to "mastodon" in webfinger_map.conf
+The include webfinger.conf then directs nginx to serve /usr/share/nginx/webfinger/mastodon.json.
+
+>[!NOTE]
+> As noted in the above mentioned blog post this will only work where "resource=" is the last query parameter.
+
 
 ## Info
 * Theme: [hugo-coder](https://github.com/luizdepra/hugo-coder)

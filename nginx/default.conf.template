@@ -1,0 +1,17 @@
+
+
+include ./includes/webfinger_map.conf;
+
+server {
+    listen      80;
+    listen  [::]:80;
+    server_name $DOMAIN;
+    include ./includes/webfinger.conf;
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+
+        try_files $uri $uri/ =404;
+    }
+}
+
