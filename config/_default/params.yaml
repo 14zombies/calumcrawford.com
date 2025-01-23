@@ -25,6 +25,7 @@ commit: "https://github.com/14zombies/calumcrawford.com/tree/"
 manifest: manifest.webmanifest
 colorScheme: "auto"
 hideColorSchemeToggle: true
+fediverseCreator: "@14zombies@mastodon.social"
 
 # Series see also post count
 maxSeeAlsoItems: 5
@@ -47,9 +48,10 @@ social:
   #   url: 'https://gist.github.com/14zombies'
 
   - name: "Mastodon"
-    icon: "fa fa-mastodon fa-2x"
+    icon: "fa-brands fa-mastodon fa-2x"
     weight: 4
     url: "https://mastodon.social/@14zombies"
+    rel: "me"
 
   - name: "RSS"
     icon: "fa fa-rss fa-2x"
