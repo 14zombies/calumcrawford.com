@@ -8,16 +8,16 @@
 
 ## Bumping Versions
 ### CI/CD
-In the drone.yml file ammend the following build args:
+In the docker_build file ammend the following build args:
 ```yaml
-HUGO_VERSION
-NGINX_TAG
+  ALPINE_VERSION: '3.21'
+  HUGO_VERSION: '0.141.0'
+  NGINX_TAG: 1.27-alpine-slim
 ```
 ### Manually sepcify versions
 ```sh
-docker build --build-arg NGINX_TAG=1.25-alpine --build-arg HUGO_VERSION=0.121.0
+docker build --build-arg NGINX_TAG=1.25-alpine --build-arg HUGO_VERSION=0.121.0 --build-arg ALPINE_VERSION=3.21
 ```
-
 
 ## Build
 ### Local – Docker
@@ -25,8 +25,6 @@ docker build --build-arg NGINX_TAG=1.25-alpine --build-arg HUGO_VERSION=0.121.0
 $ git clone --recurse-submodules https://git.14zombies.com/cal/calumcrawford.com.git
 $ cd calumcrawford.com
 $ docker run --rm -d -p 8000:80 --name calumcrawford.com $(docker build -q -f ./docker/Dockerfile . )
-or on Apple Silicon for local testing
-$ docker run --rm -d -p 8000:80 --name calumcrawford.com $(docker build -q -f ./docker/Dockerfile.linux.arm64 .)
 ```
 
 The site will then be availible on [localhost:8000](https://localhost:8000)
@@ -38,19 +36,18 @@ $ cd calumcrawford.com
 $ hugo server -w
 ```
 
-
 ### Local – Docker no build
 ```sh
 docker run --rm -d -p 8000:80 --name calumcrawford.com git.14zombies.com/cal/calumcrawford.com
 ```
 
 ## CI/CD - Tags
-### dev
-Published for every commit.
+### edge
+The edge tag reflects the last commit of the active branch.
 Used by dev.calumcrawford.com which is runs the latest non-tagged commit.
 
 ### latest
-Published only for tagged commits.
+Published only for tagged commits and points to the newest tagged commit.
 Used by calumcrawford.com which runs only tagged commits.
 
 ## Webfinger
@@ -73,10 +70,6 @@ The include webfinger.conf then directs nginx to serve /usr/share/nginx/webfinge
 ## Info
 * Theme: [hugo-coder](https://github.com/luizdepra/hugo-coder)
 * Hex for favicon is #cc0000
-
-## TODO
-    
-- Make bumping versions easier
 
 ## Authors
 * [**Calum Crawford**](https://calumcrawford.com)

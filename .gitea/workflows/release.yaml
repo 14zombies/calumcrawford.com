@@ -1,0 +1,43 @@
+name: Build Docker Image
+
+on:
+  workflow_dispatch:
+    
+  push:
+    tags:
+      - "v*"
+
+env:
+  HUGO_VERSION: '0.141.0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0 
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Run Hugo
+        run: hugo --minify -b ${{ vars.DOMAIN }}
+
+      - name: Create tar file
+        run: tar czfv ${{ gitea.ref_name }}.tar.gz -C public .
+
+      - name: Publish release
+        uses: akkuman/gitea-release-action@v1
+        with:
+          server_url: https://git.14zombies.com
+          token: ${{secrets.DOCKER_TOKEN}}
+          files: |-
+            ${{ gitea.ref_name }}.tar.gz
+          sha256sum: true
+          body: ${{ gitea.event.head_commit.message }}
