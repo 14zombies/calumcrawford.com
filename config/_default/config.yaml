@@ -4,7 +4,7 @@ baseURL: 'https://calumcrawford.com'
 relativeURLs: true
 enableRobotsTXT: true
 
-theme: 'hugo-coder'
+theme: ['hugo-admonitions', 'hugo-coder']
 
 language: 'en'
 languageCode: 'en-GB'
