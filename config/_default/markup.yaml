@@ -1,11 +1,8 @@
 ---
-goldmark:
-  renderer:
-    unsafe: true
+# goldmark:
+#   renderer:
+#     unsafe: true
 highlight:
-  anchorLineNos: false
-  codeFences: true
-  guessSyntax: true
   hl_Lines: ""
   lineAnchors: ""
   lineNoStart: 1

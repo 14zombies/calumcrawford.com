@@ -20,8 +20,8 @@ commit: "https://github.com/14zombies/calumcrawford.com/tree/"
 
 # DISPLAY
 ## Custom CSS file must go in static/
-# customCSS:
-#    - css/custom.css
+customCSS: 
+  - "css/custom.css"
 manifest: manifest.webmanifest
 colorScheme: "auto"
 hideColorSchemeToggle: true
