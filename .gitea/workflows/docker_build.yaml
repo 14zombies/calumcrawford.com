@@ -9,9 +9,9 @@ on:
       - 'v*'
 
 env:
-  ALPINE_VERSION: '3.21'
-  HUGO_VERSION: '0.141.0'
-  NGINX_TAG: 1.27-alpine-slim
+  ALPINE_VERSION: '3.23'
+  HUGO_VERSION: '0.155.2'
+  NGINX_TAG: 1.29-alpine-slim
 
 jobs:
   build:

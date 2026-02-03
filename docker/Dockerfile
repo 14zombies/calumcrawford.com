@@ -1,7 +1,7 @@
 
 ARG ALPINE_VERSION=3
 ARG NGINX_TAG=1-alpine-slim
-ARG HUGO_VERSION=0.141.0
+ARG HUGO_VERSION=0.155.2
 
 #Build Image
 FROM alpine:${ALPINE_VERSION} AS builder
@@ -30,4 +30,7 @@ COPY --from=builder /src/public/ /usr/share/nginx/html/
 COPY ./nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY ./nginx/includes /etc/nginx/includes
 COPY ./webfinger /usr/share/nginx/webfinger
+COPY ./keys /usr/share/nginx/keys
+RUN cd /usr/share/nginx/keys && sha256sum -- * > SHAFILE
+
 
