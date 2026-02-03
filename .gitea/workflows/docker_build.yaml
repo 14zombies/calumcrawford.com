@@ -124,25 +124,32 @@ jobs:
           flavor: |
             latest=false
 
-      - name: Create manifest list and push tags
+      - name: Create manifest list and push tags (sequential)
         working-directory: ${{ runner.temp }}/digests
         env:
           DOCKER_METADATA_OUTPUT_JSON: ${{ steps.meta.outputs.json }}
         run: |
           set -euo pipefail
-          TAGS=$(jq -r '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
           REFS=$(printf '${{ vars.REGISTRY_IMAGE }}@sha256:%s ' *)
 
-          for i in 1 2 3 4 5; do
-            echo "Attempt $i: pushing manifest"
-            if docker buildx imagetools create $TAGS $REFS; then
-              exit 0
-            fi
-            sleep $((i*i*3))  # 3s, 12s, 27s, 48s, 75s
-          done
+          # tags as a bash list
+          mapfile -t TAG_LIST < <(jq -r '.tags[]' <<< "$DOCKER_METADATA_OUTPUT_JSON")
 
-          echo "Failed to push manifest after retries"
-          exit 1
+          for tag in "${TAG_LIST[@]}"; do
+            echo "Pushing manifest tag: $tag"
+            for i in 1 2 3 4 5; do
+              if docker buildx imagetools create -t "$tag" $REFS; then
+                break
+              fi
+              echo "Retry $i for $tag"
+              sleep $((i*i*3))
+              if [ "$i" -eq 5 ]; then
+                echo "Failed pushing $tag"
+                exit 1
+              fi
+            done
+            sleep 2
+          done
 
       - name: Inspect image
         run: |
