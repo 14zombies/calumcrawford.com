@@ -45,6 +45,9 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Set up QEMU
+        if: |
+          (matrix.platform == 'linux/arm64' && runner.arch != 'ARM64') ||
+          (matrix.platform == 'linux/amd64' && runner.arch != 'X64')
         uses: docker/setup-qemu-action@v3
         with:
           platforms: ${{ matrix.platform }}
@@ -126,9 +129,20 @@ jobs:
         env:
           DOCKER_METADATA_OUTPUT_JSON: ${{ steps.meta.outputs.json }}
         run: |
+          set -euo pipefail
           TAGS=$(jq -r '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON")
           REFS=$(printf '${{ vars.REGISTRY_IMAGE }}@sha256:%s ' *)
-          docker buildx imagetools create $TAGS $REFS
+
+          for i in 1 2 3 4 5; do
+            echo "Attempt $i: pushing manifest"
+            if docker buildx imagetools create $TAGS $REFS; then
+              exit 0
+            fi
+            sleep $((i*i*3))  # 3s, 12s, 27s, 48s, 75s
+          done
+
+          echo "Failed to push manifest after retries"
+          exit 1
 
       - name: Inspect image
         run: |
