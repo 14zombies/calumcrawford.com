@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches:
-     - '*'
+      - "*"
     tags:
-      - 'v*'
+      - "v*"
 
 env:
-  ALPINE_VERSION: '3.23'
-  HUGO_VERSION: '0.155.2'
-  NGINX_TAG: 1.29-alpine-slim
+  ALPINE_VERSION: "3.24"
+  HUGO_VERSION: "0.170.1"
+  NGINX_TAG: 1.31-alpine-slim
 
 jobs:
   build:
@@ -154,3 +154,4 @@ jobs:
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ${{ vars.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
+
