@@ -154,4 +154,3 @@ jobs:
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ${{ vars.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
-
