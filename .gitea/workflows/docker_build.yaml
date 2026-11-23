@@ -76,7 +76,6 @@ jobs:
             DART_SASS_VERSION=${{ env.DART_SASS_VERSION }}
             NGINX_TAG=${{ env.NGINX_TAG }}
             HUGO_VERSION=${{ env.HUGO_VERSION }}
-            RUNNER_TEMP=${{ env.RUNNER_TEMP }}
       - name: Export digest
         run: |
           mkdir -p ${{ runner.temp }}/digests
