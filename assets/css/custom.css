@@ -1,9 +1,0 @@
-/*Prefer ragged right on all pages*/
-.content article *{
-    text-align: left !important;
-}
-
-.reading-time {
-    display: none;
-}
-/*assets*/
