@@ -10,6 +10,7 @@ on:
 
 env:
   ALPINE_VERSION: "3.24"
+  DART_SASS_VERSION: "1.108.2"
   HUGO_VERSION: "0.170.1"
   NGINX_TAG: 1.31-alpine-slim
 
@@ -72,6 +73,7 @@ jobs:
             REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
             DOMAIN=${{ vars.DOMAIN }}
             ALPINE_VERSION=${{ env.ALPINE_VERSION }}
+            DART_SASS_VERSION=${{ env.DART_SASS_VERSION }}
             NGINX_TAG=${{ env.NGINX_TAG }}
             HUGO_VERSION=${{ env.HUGO_VERSION }}
             RUNNER_TEMP=${{ env.RUNNER_TEMP }}
