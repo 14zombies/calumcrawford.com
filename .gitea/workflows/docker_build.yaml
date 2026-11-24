@@ -73,7 +73,6 @@ jobs:
             REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
             DOMAIN=${{ vars.DOMAIN }}
             ALPINE_VERSION=${{ env.ALPINE_VERSION }}
-            DART_SASS_VERSION=${{ env.DART_SASS_VERSION }}
             NGINX_TAG=${{ env.NGINX_TAG }}
             HUGO_VERSION=${{ env.HUGO_VERSION }}
       - name: Export digest

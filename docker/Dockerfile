@@ -1,35 +1,43 @@
 
 ARG ALPINE_VERSION=3
-ARG DART_SASS_VERSION=1.108.2
 ARG NGINX_TAG=1-alpine-slim
 ARG HUGO_VERSION=0.170.1
+
+# dart-sass
+FROM alpine:${ALPINE_VERSION} AS dart-sass
+ARG TARGETARCH
+RUN apk add jq curl
+RUN curl -s https://api.github.com/repos/sass/dart-sass/releases/latest | \
+    jq -r --arg REGEXP "^.+-linux-${TARGETARCH/amd64/x64}-musl.tar.gz$" '.assets[].browser_download_url | match($REGEXP) | .string' | \
+    xargs -n1 curl -L -o dart-sass.tar.gz
+RUN tar -C /opt -xzf dart-sass.tar.gz
+
+#Hugo
+FROM alpine:${ALPINE_VERSION} AS hugo
+ARG TARGETARCH
+ARG TARGETOS
+ARG HUGO_VERSION
+ARG HUGO_ARCH=${TARGETOS}-${TARGETARCH}
+ARG RELEASE_TAR=https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_${HUGO_ARCH}.tar.gz
+WORKDIR /opt/hugo
+RUN apk add --update libc6-compat libstdc++ git curl
+RUN curl -s -L  ${RELEASE_TAR}\
+    | tar -xvzf - -C /opt/hugo
 
 #Build Image
 FROM alpine:${ALPINE_VERSION} AS builder
 ARG DOMAIN=localhost
-ARG TARGETARCH
-ARG TARGETOS
-ARG DART_SASS_VERSION
-ARG HUGO_VERSION
-ARG HUGO_ARCH=${TARGETOS}-${TARGETARCH}
-ARG RUNNER_TEMP=/tmp
-ARG RELEASE_TAR=https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_${HUGO_ARCH}.tar.gz
-WORKDIR /hugo
-RUN apk add --update libc6-compat libstdc++ git curl
-RUN curl -sfLO --output-dir "${RUNNER_TEMP}" "https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/dart-sass-${DART_SASS_VERSION}-${HUGO_ARCH}.tar.gz"
-RUN ls -la /tmp
-RUN tar -C "/opt" -xf "${RUNNER_TEMP}/dart-sass-${DART_SASS_VERSION}-${HUGO_ARCH}.tar.gz"
-ENV PATH="/opt/dart-sass:${PATH}"
-RUN curl -s -L  ${RELEASE_TAR}\
-    | tar -xvzf - -C /hugo && \
-    cp /hugo/hugo /usr/local/bin
 WORKDIR /src
+RUN apk add --update libc6-compat libstdc++ git curl
+COPY --from=dart-sass /opt/dart-sass /opt/dart-sass
+COPY --from=hugo /opt/hugo/hugo /opt/hugo/hugo
+ENV PATH="/opt/dart-sass:/opt/hugo:${PATH}"
 COPY . /src
-RUN /usr/local/bin/hugo --minify --gc -b ${DOMAIN}
+RUN hugo --minify --gc -b ${DOMAIN}
 
 # Final Image
-ARG NGINX_TAG
 FROM nginx:$NGINX_TAG
+ARG NGINX_TAG
 LABEL maintainer="Calum Crawford <c@calumcrawford.com>"
 LABEL title="calumcrawford.com"
 LABEL description="Image for calumcrawford.com"
@@ -39,5 +47,4 @@ COPY ./nginx/includes /etc/nginx/includes
 COPY ./webfinger /usr/share/nginx/webfinger
 COPY ./keys /usr/share/nginx/keys
 RUN cd /usr/share/nginx/keys && sha256sum -- * > SHAFILE
-
 
